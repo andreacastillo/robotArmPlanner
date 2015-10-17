@@ -45,36 +45,38 @@ move(pickup(X), [handempty, clear(X), on(X, Y)],
 		[del(handempty), del(clear(X)), del(on(X, Y)),
 				 add(clear(Y)),	add(holding(X))]).
 
-move(pickup(X), [handempty, clear(X), ontable(X)],
-		[del(handempty), del(clear(X)), del(ontable(X)),
+move(pickup(X), [handempty, clear(X), ontable1(X)],
+		[del(handempty), del(clear(X)), del(ontable1(X)),
 				 add(holding(X))]).
 
 move(pickup(X), [handempty, clear(X), ontable2(X)],
 		[del(handempty), del(clear(X)), del(ontable2(X)),
 				 add(holding(X))]).
+move(pickup(X), [handempty],[] ).
+
+move(pickup(X), [handempty],[] ).
+
 
 move(putdown(X), [holding(X)],
-		[del(holding(X)), add(ontable(X)), add(clear(X)),
+		[del(holding(X)), add(ontable1(X)), add(clear(X)),
 				  add(handempty)]).
-
 move(putdown(X), [holding(X)],
 		[del(holding(X)), add(ontable2(X)), add(clear(X)),
 				  add(handempty)]).
 
 
-move(goroom(N), [room(M)],
-		[add(room(N)),del(room(M))]).
-
 move(stack(X, Y), [holding(X), clear(Y)],
 		[del(holding(X)), del(clear(Y)), add(handempty), add(on(X, Y)),
 				  add(clear(X))]).
+
+
 /* run commands */
 
 go(S, G) :- plan(S, G, [S], []).
 
-test :- go([handempty, room(1), ontable(b),  on(a, b), clear(a)],
-	          [handempty, room(1), ontable2(b), on(a,b), clear(a)]).
+test :- go([handempty, ontable1( b), ontable2(c), on(a, b), clear(c), clear(a)],
+	          [handempty, ontable(c), on(a,b), on(b, c), clear(a)]).
 
-test2 :- go([handempty, ontable(b), ontable(c), on(a, b), clear(c), clear(a)],
-	          [handempty, ontable(a), ontable(b), on(c, b), clear(a), clear(c)]).
+test2 :- go([handempty, ontable1(b), ontable2(c), on(a, b), clear(c), clear(a)],
+	          [handempty, ontable1(a), ontable2(b), on(c, b), clear(a), clear(c)]).
 
