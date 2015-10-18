@@ -17,17 +17,22 @@
 
 :- [utils].
 
-plan(State, Goal, _, Moves) :-	equal_set(State, Goal),
+
+
+plan(State, Goal, _, Moves, 0) :-	
+				equal_set(State, Goal),
 				write('moves are'), nl,
 				reverse_print_stack(Moves).
-plan(State, Goal, Been_list, Moves) :-
+plan(State, Goal, Been_list, Moves, Level) :-
+				Level > 0,
 				move(Name, Preconditions, Actions),
 				conditions_met(Preconditions, State),
 				change_state(State, Actions, Child_state),
 				not(member_state(Child_state, Been_list)),
 				stack(Child_state, Been_list, New_been_list),
 				stack(Name, Moves, New_moves),
-			plan(Child_state, Goal, New_been_list, New_moves),!.
+				New_level is Level -1,
+			plan(Child_state, Goal, New_been_list, New_moves, New_Level),!.
 
 change_state(S, [], S).
 change_state(S, [add(P)|T], S_new) :-	change_state(S, T, S2),
@@ -83,7 +88,14 @@ move(goroom2, [room(1)],
 		[add(room(2)),del(room(1))]).
 /* run commands */
 
-go(S, G) :- plan(S, G, [S], []).
+go(S, G) :- planIDS(S, G, [S], [], 0).
+
+planIDS(State,Goal,Been_list, Moves, Main_level):-
+   plan(State, Goal, Been_list, Moves, Level).
+
+planIDS(State,Goal,Been_list, Moves, Main_level) :-
+   New_MainLevel is Main_level,
+  planIDS(State, Goal, Been_list, Moves, New_MainLevel).
 
 test :- go([handempty, room(1), ontable(b), on(a,b),  clear(a)],
 	          [handempty,  room(2), ontable2(b), on2(a,b), clear2(a)]).
