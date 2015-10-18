@@ -41,40 +41,53 @@ member_state(S, [_|T]) :-	member_state(S, T).
 
 /* move types */
 
-move(pickup(X), [handempty, clear(X), on(X, Y)],
+
+move(pickup10(X), [handempty, clear(X), on(X, Y)],
 		[del(handempty), del(clear(X)), del(on(X, Y)),
-				 add(clear(Y)),	add(holding(X))]).
+				  add(clear(Y)),	add(holding(X))]).
 
-move(pickup(X), [handempty, clear(X), ontable(X)],
+move(pickup20(X), [handempty, clear2(X), on2(X, Y)],
+		[del(handempty), del(clear2(X)), del(on2(X, Y)),
+				  add(clear2(Y)),	add(holding(X))]).
+
+move(pickup(X), [handempty, room(1),  clear(X), ontable(X)],
 		[del(handempty), del(clear(X)), del(ontable(X)),
-				 add(holding(X))]).
+				 add(room(1)), add(holding(X))]).
 
-move(pickup(X), [handempty, clear(X), ontable2(X)],
-		[del(handempty), del(clear(X)), del(ontable2(X)),
-				 add(holding(X))]).
+move(pickup2(X), [handempty, room(2),  clear2(X), ontable2(X)],
+		[del(handempty), del(clear2(X)), del(ontable2(X)),
+				 add(room(2)),add(holding(X))]).
 
-move(putdown(X), [holding(X)],
+move(putdown(X), [holding(X), room(1)],
 		[del(holding(X)), add(ontable(X)), add(clear(X)),
 				  add(handempty)]).
 
-move(putdown(X), [holding(X)],
-		[del(holding(X)), add(ontable2(X)), add(clear(X)),
+
+
+move(putdown2(X), [holding(X), room(2)],
+		[del(holding(X)), add(ontable2(X)), add(clear2(X)),
 				  add(handempty)]).
-
-
-move(goroom(N), [room(M)],
-		[add(room(N)),del(room(M))]).
 
 move(stack(X, Y), [holding(X), clear(Y)],
 		[del(holding(X)), del(clear(Y)), add(handempty), add(on(X, Y)),
 				  add(clear(X))]).
+
+move(stack2(X, Y), [holding(X), clear2(Y)],
+		[del(holding(X)), del(clear2(Y)), add(handempty), add(on2(X, Y)),
+				  add(clear2(X))]).
+
+move(goroom1, [room(2)],
+		[add(room(1)),del(room(2))]).
+
+move(goroom2, [room(1)],
+		[add(room(2)),del(room(1))]).
 /* run commands */
 
 go(S, G) :- plan(S, G, [S], []).
 
-test :- go([handempty, room(1), ontable(b),  on(a, b), clear(a)],
-	          [handempty, room(1), ontable2(b), on(a,b), clear(a)]).
+test :- go([handempty, room(1), ontable(b), on(a,b),  clear(a)],
+	          [handempty,  room(2), ontable2(b), on2(a,b), clear2(a)]).
 
-test2 :- go([handempty, ontable(b), ontable(c), on(a, b), clear(c), clear(a)],
-	          [handempty, ontable(a), ontable(b), on(c, b), clear(a), clear(c)]).
+test2 :- go([handempty, room(1), ontable(a), clear(a)],
+	          [handempty, room(1), ontable2(a), clear2(a)]).
 
