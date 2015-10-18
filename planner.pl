@@ -42,19 +42,19 @@ member_state(S, [_|T]) :-	member_state(S, T).
 /* move types */
 
 
-move(pickup10(X), [handempty, clear(X), on(X, Y)],
+move(pickup10(X), [handempty, clear(X), room(1), on(X, Y)],
 		[del(handempty), del(clear(X)), del(on(X, Y)),
 				  add(clear(Y)),	add(holding(X))]).
 
-move(pickup20(X), [handempty, clear2(X), on2(X, Y)],
+move(pickup20(X), [handempty, clear2(X), room(2), on2(X, Y)],
 		[del(handempty), del(clear2(X)), del(on2(X, Y)),
 				  add(clear2(Y)),	add(holding(X))]).
 
-move(pickup(X), [handempty, room(1),  clear(X), ontable(X)],
+move(pickup(X), [handempty, room(1),  room(1), clear(X), ontable(X)],
 		[del(handempty), del(clear(X)), del(ontable(X)),
-				 add(room(1)), add(holding(X))]).
+				 add(holding(X))]).
 
-move(pickup2(X), [handempty, room(2),  clear2(X), ontable2(X)],
+move(pickup2(X), [handempty, room(2), room(2), clear2(X), ontable2(X)],
 		[del(handempty), del(clear2(X)), del(ontable2(X)),
 				 add(room(2)),add(holding(X))]).
 
@@ -68,11 +68,11 @@ move(putdown2(X), [holding(X), room(2)],
 		[del(holding(X)), add(ontable2(X)), add(clear2(X)),
 				  add(handempty)]).
 
-move(stack(X, Y), [holding(X), clear(Y)],
+move(stack(X, Y), [holding(X), room(1), clear(Y)],
 		[del(holding(X)), del(clear(Y)), add(handempty), add(on(X, Y)),
 				  add(clear(X))]).
 
-move(stack2(X, Y), [holding(X), clear2(Y)],
+move(stack2(X, Y), [holding(X), room(2), clear2(Y)],
 		[del(holding(X)), del(clear2(Y)), add(handempty), add(on2(X, Y)),
 				  add(clear2(X))]).
 
