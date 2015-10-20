@@ -12,7 +12,7 @@
 :- module( planner,
 	   [
 	       plan/5,change_state/3,conditions_met/2,member_state/2,
-	       move/3,go/2,test/0,test2/0, test1/0
+	       move/3,go/2,test/0,test2/0, test1/0, test3/0
 	   ]).
 
 :- [utils].
@@ -21,6 +21,13 @@ plan(State, Goal, _, Moves, 0) :-
    equal_set(State, Goal),
 	write('moves are'), nl,
 	reverse_print_stack(Moves).
+
+plan(State, Goal, Been_list, Moves, Level) :-
+   New_Level is Level+1,
+   bfs_call(State, Goal, Been_list, Moves, New_Level).
+
+bfs_call(State, Goal, Been_list, Moves, Level) :-
+		bfs(State, Goal, Been_list, Moves, Level).
 
 bfs(State, Goal, Been_list, Moves, Level) :-
 				Level > 0,
@@ -33,12 +40,7 @@ bfs(State, Goal, Been_list, Moves, Level) :-
 				New_Level is Level -1,
 			bfs(Child_state, Goal, New_been_list, New_moves,  New_Level),!.
 
-plan(State, Goal, Been_list, Moves, Level) :-
-   New_Level is Level+1,
-   bfs_call(State, Goal, Been_list, Moves, New_Level).
- 
- bfs_call(State, Goal, Been_list, Moves, Level) :-
- 		bfs(State, Goal, Been_list, Moves, Level).
+
 
 change_state(S, [], S).
 change_state(S, [add(P)|T], S_new) :-	change_state(S, T, S2),
@@ -104,3 +106,6 @@ test1 :- go([handempty, room(1), ontable(b), on(c,b), ontable2(a) , clear(c), cl
 
 test2 :- go([handempty, room(1), ontable(a), clear(a)],
 	          [handempty, room(1), ontable2(a), clear2(a)]).
+
+test3 :- go([handempty, room(1), ontable(a), clear(a)],
+	          [handempty, room(1), ontable(a), clear(a)]).
