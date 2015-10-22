@@ -11,35 +11,35 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :- module( planner,
 	   [
-	       plan/5,change_state/3,conditions_met/2,member_state/2,
+	       plan/6,change_state/3,conditions_met/2,member_state/2,
 	       move/3,go/2,test/0,test2/0, test1/0, test3/0
 	   ]).
 
 :- [utils].
 
-plan(State, Goal, _, Moves, 0) :-
+
+plan(State, Goal, _, Moves, _,_) :-
    equal_set(State, Goal),
 	write('moves are'), nl,
 	reverse_print_stack(Moves).
 
-plan(State, Goal, Been_list, Moves, Level) :-
-   New_Level is Level+1,
-   bfs_call(State, Goal, Been_list, Moves, New_Level).
 
-bfs_call(State, Goal, Been_list, Moves, Level) :-
-		bfs(State, Goal, Been_list, Moves, Level).
 
-bfs(State, Goal, Been_list, Moves, Level) :-
-				Level > 0,
+plan(State, Goal, Been_list, Moves, Level, Sub_Level) :-
+				Sub_Level =< Level,
 				move(Name, Preconditions, Actions),
 				conditions_met(Preconditions, State),
 				change_state(State, Actions, Child_state),
 				not(member_state(Child_state, Been_list)),
 				stack(Child_state, Been_list, New_been_list),
 				stack(Name, Moves, New_moves),
-				New_Level is Level -1,
-			bfs(Child_state, Goal, New_been_list, New_moves,  New_Level),!.
+				NewSub_Level is Sub_Level+1,
+			plan(Child_state, Goal, New_been_list, New_moves,Level,  NewSub_Level),!.
 
+plan(State, Goal, Been_list, Moves, Level,Sub_Level) :-
+New_Level is Level +1,
+Sub_Level is 0,
+ plan(State, Goal, Been_list, Moves, New_Level,Sub_Level).
 
 
 change_state(S, [], S).
@@ -96,7 +96,7 @@ move(goroom2, [room(1)],
 		[add(room(2)),del(room(1))]).
 /* run commands */
 
-go(S, G) :- plan(S, G, [S], [], 0).
+go(S, G) :- plan(S, G, [S], [], 0, 0).
 
 test :- go([handempty, room(1), ontable(b), on(a,b),  clear(a)],
 	          [handempty,  room(2), ontable2(b), on2(a,b), clear2(a)]).
