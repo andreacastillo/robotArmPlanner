@@ -6,8 +6,9 @@
 %%% Artificial Intelligence:
 %%% Structures and strategies for complex problem solving
 %%%
-%%% by George F. Luger and William A. Stubblefield
-%%%
+%%% UCF FALL 2015
+%%% AI CAP4630 Prolog assignment
+%%%  Authors : Andrea Castillo and Kevin Anderson
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :- module( planner,
 	   [
