@@ -109,3 +109,17 @@ test2 :- go([handempty, room(1), ontable(a), clear(a)],
 
 test3 :- go([handempty, room(1), ontable(a), clear(a)],
 	          [handempty, room(1), ontable(a), clear(a)]).
+
+test4 :- go([handempty, room(1), ontable(a), on(b,a), on(c,b), on(d,c), clear(d), ontable(e), clear(e), room(2), 
+	ontable2(f), clear2(f), ontable2(g), on2(g,h), clear2(h)],
+	[handempty, room(1), ontable(f), on(f,g), clear(g), ontable(b), clear(b), ontable(c), clear(c),
+	room(2), ontable2(a), on2(e,a), on2(h,e), clear2(h), ontable2(d), clear2(d)]).
+
+
+
+
+
+
+
+
+
