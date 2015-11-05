@@ -12,7 +12,7 @@
 :- module( planner,
 	   [
 	       plan/6,change_state/3,conditions_met/2,member_state/2,
-	       move/3,go/2,test/0,test2/0, test1/0, test3/0
+	       move/3,go/2,test/0,test2/0, test1/0
 	   ]).
 
 :- [utils].
@@ -55,11 +55,11 @@ member_state(S, [_|T]) :-	member_state(S, T).
 /* move types */
 
 
-move(pickup10(X), [handempty, clear(X), room(1), on(X, Y)],
+move(pickup(X), [handempty, clear(X), room(1), on(X, Y)],
 		[del(handempty), del(clear(X)), del(on(X, Y)),
 				  add(clear(Y)),	add(holding(X))]).
 
-move(pickup20(X), [handempty, clear2(X), room(2), on2(X, Y)],
+move(pickup(X), [handempty, clear2(X), room(2), on2(X, Y)],
 		[del(handempty), del(clear2(X)), del(on2(X, Y)),
 				  add(clear2(Y)),	add(holding(X))]).
 
@@ -67,7 +67,7 @@ move(pickup(X), [handempty, room(1),  clear(X), ontable(X)],
 		[del(handempty), del(clear(X)), del(ontable(X)),
 				 add(holding(X))]).
 
-move(pickup2(X), [handempty, room(2), clear2(X), ontable2(X)],
+move(pickup(X), [handempty, room(2), clear2(X), ontable2(X)],
 		[del(handempty), del(clear2(X)), del(ontable2(X)),
 				 add(room(2)),add(holding(X))]).
 
@@ -77,7 +77,7 @@ move(putdown(X), [holding(X), room(1)],
 
 
 
-move(putdown2(X), [holding(X), room(2)],
+move(putdown(X), [holding(X), room(2)],
 		[del(holding(X)), add(ontable2(X)), add(clear2(X)),
 				  add(handempty)]).
 
@@ -100,12 +100,8 @@ go(S, G) :- plan(S, G, [S], [], 0, 0).
 
 test :- go([handempty, room(1), ontable(b), on(a,b),  clear(a)],
 	          [handempty,  room(2), ontable2(b), on2(a,b), clear2(a)]).
+test1:- go([handempty, room(1), ontable(a), on(b,a), on(c,b), on(d,c),  clear(d), ontable(e), clear(e)],
+	          [handempty,  room(2),ontable2(a), on2(b,a), on2(c,b), on2(d,c),  clear2(d), ontable(e), clear(e)]).
 
-test1 :- go([handempty, room(1), ontable(b), on(c,b), ontable2(a) , clear(c), clear2(a)],
-	          [handempty,  room(2), ontable2(c), on2(a,b), on2(b,c), clear2(a)]).
-
-test2 :- go([handempty, room(1), ontable(a), clear(a)],
-	          [handempty, room(1), ontable2(a), clear2(a)]).
-
-test3 :- go([handempty, room(1), ontable(a), clear(a)],
-	          [handempty, room(1), ontable(a), clear(a)]).
+test2:- go([handempty, room(1), ontable(a), on(b,a), clear(b), ontable(e), clear(e), ontable2(f), on2(g,f), clear2(g)],
+	          [handempty, room(2), ontable2(a), on2(e,a), clear2(e), ontable(b), clear(b), ontable(f), on(g,f), clear(g)]).
